@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CulWeather</string>
+    <string name="daily_forecast">三天预测</string>
+    <string name="hourly_forecast">一天预测</string>
+    <string name="air_quality">空气质量</string>
+    <string name="aqi_text">AQI指数</string>
+    <string name="pm2.5">PM2.5指数</string>
+    <string name="suggestion">生活建议</string>
 </resources>

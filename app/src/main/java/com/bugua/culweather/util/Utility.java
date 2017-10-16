@@ -1,10 +1,13 @@
 package com.bugua.culweather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.bugua.culweather.db.City;
 import com.bugua.culweather.db.County;
 import com.bugua.culweather.db.Province;
+import com.bugua.culweather.gson.HeWeather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,13 +21,13 @@ public class Utility {
     /**
      * 解析和处理服务器返回的省级数据
      */
-    public static boolean handleProvinceResponse(String response){
-        if(TextUtils.isEmpty(response)){
+    public static boolean handleProvinceResponse(String response) {
+        if (!TextUtils.isEmpty(response)) {
             try {
-                JSONArray allProvinces=new JSONArray(response);
-                for(int x=0;x<allProvinces.length();x++){
-                    JSONObject provinceObject=allProvinces.getJSONObject(x);
-                    Province province=new Province();
+                JSONArray allProvinces = new JSONArray(response);
+                for (int x = 0; x < allProvinces.length(); x++) {
+                    JSONObject provinceObject = allProvinces.getJSONObject(x);
+                    Province province = new Province();
                     province.setProvinceCode(provinceObject.getInt("id"));
                     province.setProvinceName(provinceObject.getString("name"));
                     province.save();
@@ -36,16 +39,17 @@ public class Utility {
         }
         return false;
     }
+
     /**
      * 解析和处理服务器返回的市级数据
      */
-    public static boolean handleCityResponse(String response,int provinceId){
-        if(TextUtils.isEmpty(response)){
+    public static boolean handleCityResponse(String response, int provinceId) {
+        if (!TextUtils.isEmpty(response)) {
             try {
-                JSONArray allCities=new JSONArray(response);
-                for(int x=0;x<allCities.length();x++){
-                    JSONObject cityObject=allCities.getJSONObject(x);
-                    City city=new City();
+                JSONArray allCities = new JSONArray(response);
+                for (int x = 0; x < allCities.length(); x++) {
+                    JSONObject cityObject = allCities.getJSONObject(x);
+                    City city = new City();
                     city.setCityCode(cityObject.getInt("id"));
                     city.setCityName(cityObject.getString("name"));
                     city.setProvinceId(provinceId);
@@ -59,16 +63,17 @@ public class Utility {
         return false;
 
     }
+
     /**
      * 解析和处理服务器返回的县级数据
      */
-    public static boolean handleCountyResponse(String response,int cityId){
-        if(TextUtils.isEmpty(response)){
+    public static boolean handleCountyResponse(String response, int cityId) {
+        if (!TextUtils.isEmpty(response)) {
             try {
-                JSONArray allCounties=new JSONArray(response);
-                for(int x=0;x<allCounties.length();x++){
-                    JSONObject countyObject=allCounties.getJSONObject(x);
-                    County county=new County();
+                JSONArray allCounties = new JSONArray(response);
+                for (int x = 0; x < allCounties.length(); x++) {
+                    JSONObject countyObject = allCounties.getJSONObject(x);
+                    County county = new County();
                     county.setCityId(cityId);
                     county.setCountyName(countyObject.getString("name"));
                     county.setWeatherId(countyObject.getString("weather_id"));
@@ -81,5 +86,21 @@ public class Utility {
         }
         return false;
 
+    }
+    /**
+     * 解析和处理服务器返回的天气数据
+     */
+    public static HeWeather handleWeatherResponse(String response){
+        JSONObject jsonObject= null;
+        try {
+            jsonObject = new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather5");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,HeWeather.class);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
