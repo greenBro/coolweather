@@ -85,10 +85,17 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity = cityList.get(i);
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra("selectedCounty", countyList.get(i).getCountyName());
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("selectedCounty", countyList.get(i).getCountyName());
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else if (getActivity() instanceof WeatherActivity) {
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefreshLayout.setRefreshing(true);
+                        activity.requestWeather(countyList.get(i).getCountyName());
+                    }
                 }
             }
         });
@@ -157,7 +164,7 @@ public class ChooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel = LEVEL_COUNTY;
         } else {
-            String address = "http://guolin.tech/api/china/" + selectedProvince.getProvinceCode()+"/"+selectedCity.getCityCode();
+            String address = "http://guolin.tech/api/china/" + selectedProvince.getProvinceCode() + "/" + selectedCity.getCityCode();
             queryFromServer(address, "county");
         }
     }
