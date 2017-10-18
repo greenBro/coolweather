@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bugua.culweather.gson.Aqi;
+
 import com.bugua.culweather.gson.DailyForecast;
 import com.bugua.culweather.gson.HeWeather;
 import com.bugua.culweather.util.HttpUtil;
@@ -31,7 +30,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.zip.Inflater;
+
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -178,7 +177,7 @@ public class WeatherActivity extends AppCompatActivity {
             aqiText.setText(weather.aqi.aqiCity.getAqi());
             pm25Text.setText(weather.aqi.aqiCity.getPm25());
             apiLayout.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             apiLayout.setVisibility(View.GONE);
         }
         comfortText.setText("舒适度：" + weather.suggestion.comfortlevel.context);
@@ -212,6 +211,5 @@ public class WeatherActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 }
